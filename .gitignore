@@ -1,4 +1,4 @@
-project-env/
+env/
 .vscode/
 imageColorizationAI/__pycache__/
 PDI_project/__pycache__/
