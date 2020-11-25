@@ -1,5 +1,3 @@
-console.log('EPA, EPA '+colorize_url);
-
 $(function(){
     var csrftoken = getCookie('csrftoken');
     $.ajax({
