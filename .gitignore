@@ -3,3 +3,4 @@ env/
 */__pycache__/
 **/__pycache__/
 imageColorizationAI/media/
+db.sqlite3
