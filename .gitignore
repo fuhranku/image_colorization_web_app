@@ -2,5 +2,5 @@ env/
 .vscode/
 */__pycache__/
 **/__pycache__/
-imageColorizationAI/media/
+media/
 db.sqlite3
