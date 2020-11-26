@@ -1,25 +1,29 @@
 $(function(){
-    var csrftoken = getCookie('csrftoken');
+
+});
+
+$('#ajax').on('submit',function(e){
+    e.preventDefault(); // Disables submit's default action
+    const imgData = new FormData($('#ajax').get(0));
+    console.log(imgData);
     $.ajax({
         type: "POST",
         url: colorize_url,
-        data: "data",
-        dataType: "json",
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        },
+        data: imgData,
+        processData: false,
+        contentType: false,
         success: function (response) {
-            console.log('Success!');
             console.log(response);
+            $('.image-container').append(
+                `<img src=${response.url}>`
+            );
         },
         error: function(response){
-            console.log('ERROR');
+            console.log('AJAX ERROR');
             console.log(response);
         }
     });
-});
+})
 
 function getCookie(name) {
     var cookieValue = null;

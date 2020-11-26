@@ -8,9 +8,14 @@
     <link href="{% static "app.css" %}" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    <h1>Hola, mundo</h1>
-    <img src="{% static "test.jpg"%}" alt="">
-    <p> {% csrf_token %} </p>
+    <h1>Cargar imagen</h1>
+    <form method="POST" id='ajax'>
+        {% csrf_token %}
+        <input type="file" name="img">
+        <button type="submit" name="imageLoader">Colorizar</button>
+    </form>
+    <div class="image-container">
+    </div>
 </body>
 <script
     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
