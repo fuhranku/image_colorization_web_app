@@ -1,0 +1,33 @@
+.spinner{
+    visibility: hidden;
+    width: 51px;
+    height: 51px;
+    border: 2px solid #ffffff;
+    border-top:3px solid #0f0f0f;
+    border-radius: 100%;
+    position: absolute;
+    top:50%;
+    left:50%;
+    animation: spin 1s infinite linear;
+    z-index: 1;
+}
+  
+.spinner.show {
+    visibility: visible;
+}
+
+@keyframes spin {
+    from {
+        transform: translate(-50%,-50%) rotate(0deg);
+    } to {
+        transform: translate(-50%,-50%) rotate(360deg);
+    }
+}
+
+.overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: rgba($color: #000000, $alpha: .7);
+}

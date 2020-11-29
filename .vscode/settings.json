@@ -1,0 +1,17 @@
+{
+  "python.pythonPath": "env\\Scripts\\python.exe",
+  "liveSassCompile.settings.formats": [
+    {
+      "extensionName": ".min.css",
+      "format": "compressed",
+      "savePath": "/PDI_project/static/"
+    }
+  ],
+  "liveSassCompile.settings.excludeList": [
+      "**/node_modules/**",
+       ".vscode/**",
+       "env/**"
+    ],
+  "liveSassCompile.settings.generateMap": true,
+  "liveSassCompile.settings.autoprefix": ["> 1%", "last 2 versions"]
+}

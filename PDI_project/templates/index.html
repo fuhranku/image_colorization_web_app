@@ -1,29 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    {% load static %}
-    <link href="{% static "app.css" %}" rel="stylesheet" type="text/css"/>
-</head>
-<body>
-    <h1>Cargar imagen</h1>
-    <form method="POST" id='ajax'>
-        {% csrf_token %}
-        <input type="file" name="img">
-        <button type="submit" name="imageLoader">Colorizar</button>
-    </form>
-    <div class="image-container">
+{% extends "layout.html" %}
+
+{% block title %}Content{% endblock %}
+
+{% block content %}
+    <div class="heading">
+        <h1>Image Colorization <span>Demo</span></h1>
+        <p> Using Convolutional Neural Networks to colorize Grayscale images</p>
     </div>
-</body>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-    integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-    crossorigin="anonymous"
-></script>
-<script>
-    var colorize_url = `{% url 'colorize' %}`;
-</script>
-    <script src="{% static "app.js" %}"></script>
-</html>
+    <div class="inner-container">
+        <form method="POST" id='ajax'>
+            {% csrf_token %}
+            <input type="file" name="uploadFile" id="imgUploader" class="d-none">
+            <label for="imgUploader" class="file-uploader">
+                Drag or click to upload your image
+            </label>
+            {% load static %}
+            <div class="image-preview">
+            </div>
+            <button type="submit" name="imageLoader">Colorize</button>
+        </form>
+    </div>
+    <script>
+        var colorize_url = `{% url 'colorize' %}`;
+    </script>
+{% endblock %}
