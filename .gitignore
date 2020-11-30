@@ -2,4 +2,5 @@ env/
 */__pycache__/
 **/__pycache__/
 media/
+PDI_project/static/trained_models/
 db.sqlite3
