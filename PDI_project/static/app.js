@@ -4,23 +4,25 @@ $(function(){
 
 $('#ajax').on('submit',function(e){
     e.preventDefault(); // Disables submit's default action
-    const imgData = new FormData($('#ajax').get(0));
-    console.log(imgData)
+    const formData = new FormData($('#ajax').get(0));
+    formData.append('option',$('select[name="versionSelector"] option:selected').val())
     $.ajax({
         type: "POST",
         url: colorize_url,
-        data: imgData,
+        data: formData,
         processData: false,
         contentType: false,
-        beforeSend: function(){
+        beforeSend: function(xhr,settings){
             $('.spinner').addClass('show');
             $('body').prepend(`
                 <div class="overlay"></div>
             `)
+            $('body').css('overflow','hidden');
         },
         complete: function () {
             $('.spinner').removeClass('show');
             $('body').find('.overlay').remove();
+            $('body').css('overflow','visible');
         },
         success: function (response) {  
             console.log(response);

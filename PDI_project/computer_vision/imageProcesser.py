@@ -14,7 +14,6 @@ import os
 import random
 import tensorflow as tf
 import urllib.request
-from .train_new import *
 from ..models import *
 from django.core.files.base import ContentFile
 from django.conf import settings
@@ -24,16 +23,26 @@ def LogPrint(object):
     logger = logging.getLogger(__name__)
     logger.error(": "+str(object))
 
-def ProcessImage(request):
+def ProcessImage(request, option=1):
     if request is not None:
+        sizes = [(400,400),(256,256)]
         # Grab uploaded image
         image = LoadImage(stream=request)
+        # Get dimensions of image
+        (H,W) = image.shape[:2]
+        # Resize to fit model (256x256)
+        image = Resize(image, *sizes[option])
         # Modify Image
-        image = Colorize(image)
+        image = ColorizeAlpha(image) if option == 0 else ColorizeFull(image)
+        # Resize image to original size
+        image = Resize(image, *(W,H))
         # Save image on disk
         imageURL = SaveImage(image, request.name)
         # Return processed image URL
         return imageURL
+
+def Resize(image, W,H):
+    return  cv2.resize(image,(W,H),interpolation=cv2.INTER_CUBIC)
 
 
 #Create embedding
@@ -50,9 +59,42 @@ def create_inception_embedding(grayscaled_rgb, inception):
         embed = inception.predict(grayscaled_rgb_resized)
     return embed
 
-def Colorize(image):
-    tf.compat.v1.disable_v2_behavior()
+def ColorizeAlpha(image):
+    # Get dimensions of image
+    (H,W) = image.shape[:2]
+    # Normalize image to handle variations in intensity
+    image = (image * 1.0 / 255).astype(np.float32)
+    # Convert to Lab color space and grab channel L
+    image = cv2.cvtColor(image,cv2.COLOR_RGB2Lab)
+    # Get L channel from image
+    X = image[:,:,0]
+    # Resize image to network input size
+    X = X.reshape(1, 400, 400, 1)
+    # Load model
+    model = tf.keras.models.load_model(finders.find('trained_models/my_model'))
+    # Colorize
+    output = model.predict(X)
+    # Denormalize ab channels from L * a * b
+    output *= 128
+    # Putting all together
+    colorizedImage = np.zeros((W,H,3))
+    # Get L Channel from prepros image
+    colorizedImage[:,:,0] = X[0][:,:,0]
+    # Get ab Channel from output image
+    colorizedImage[:,:,1:] = output[0]
+    # Convert to float32
+    colorizedImage = colorizedImage.astype(np.float32)
+    # Convert to RGB
+    colorizedImage = cv2.cvtColor(colorizedImage,cv2.COLOR_Lab2RGB)
+    # Denormalize values
+    colorizedImage = colorizedImage * 255
+    # Cast values to unsigned int
+    colorizedImage = colorizedImage.astype(np.uint8)
 
+    return colorizedImage
+
+def ColorizeFull(image):
+    tf.compat.v1.disable_v2_behavior()
     # Get dimensions of image
     (H,W) = image.shape[:2]
     # Normalize image to handle variations in intensity
@@ -68,9 +110,7 @@ def Colorize(image):
 
     inception = InceptionResNetV2(weights=None, include_top=True)
     inception.graph = tf.compat.v1.get_default_graph()
-
     X_embed = create_inception_embedding(X, inception)
-
     # Colorize Image with CNN
     output = model.predict([X,X_embed])
     # Denormalize ab channels from L * a * b

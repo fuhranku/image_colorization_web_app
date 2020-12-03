@@ -8,8 +8,13 @@
         <p> Using Convolutional Neural Networks to colorize Grayscale images</p>
     </div>
     <div class="inner-container">
-        <form method="POST" id='ajax'>
+        <form method="POST" id='ajax' enctype="multipart/form-data">
             {% csrf_token %}
+            <p>Select which version do you want to use:</p>
+            <select name="versionSelector" id="">
+                <option value="0">Alpha</option>
+                <option value="1" selected>Full</option>
+            </select>
             <input type="file" name="uploadFile" id="imgUploader" class="d-none">
             <label for="imgUploader" class="file-uploader">
                 Drag or click to upload your image

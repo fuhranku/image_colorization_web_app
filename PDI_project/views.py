@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .computer_vision.imageProcesser import LogPrint, ProcessImage
+import json
 
 # Create your views here.
 def index(request):
@@ -16,7 +17,7 @@ def colorize(request):
         return JsonResponse(
             {
                 "Success":"Ajax Successful!",
-                 "url":ProcessImage(_request)
+                 "url":ProcessImage(_request,int(request.POST['option']))
             },
             status=200)
 

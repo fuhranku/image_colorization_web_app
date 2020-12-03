@@ -44,6 +44,19 @@ body{
         form{
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+            p{
+                grid-column: auto / span 2;
+                color: white;
+                text-align: center;
+            }
+            select{
+                grid-column: auto / span 2;
+                width: 7rem;
+                padding: .6rem .5rem;
+                border: 2px solid white;
+                justify-self: center;
+                margin-bottom: 2rem;
+            }
             .file-uploader{
                 grid-column: auto / span 2;
                 border: dashed .2rem #959595;
