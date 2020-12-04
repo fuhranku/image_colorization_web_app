@@ -102,6 +102,7 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+
 function IsValidImage(file){
     // if (!file) return false;
     var fileType = file["type"];
